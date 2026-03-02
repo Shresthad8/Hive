@@ -362,3 +362,174 @@ CREATE TABLE web_logs (
 PARTITIONED BY (event_date STRING)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ',';
+
+
+
+
+Assignment!
+
+-- use your database
+USE hive_test;
+
+----------------------------------------------------
+-- 1. Create complex table
+----------------------------------------------------
+
+CREATE TABLE salesdetail_complex (
+  Product_ID INT,
+  productdetails MAP<STRING,STRING>,
+  Order_Priority STRING,
+  merchantType STRING,
+  Sale_Amount DOUBLE,
+  Order_Quantity BIGINT,
+  Discount FLOAT,
+  Salaryhike TINYINT,
+  companyprofit SMALLINT,
+  financeDeficit DECIMAL(8,2),
+  indian BOOLEAN,
+  saledate ARRAY<DATE>,
+  saleyear ARRAY<INT>,
+  selleramountfile ARRAY<DOUBLE>,
+  orderQuantityfile ARRAY<BIGINT>,
+  costlist MAP<INT,INT>,
+  strutureType STRUCT<city:STRING,state:STRING,pin:BIGINT>,
+  systemdatetime ARRAY<STRING>
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+COLLECTION ITEMS TERMINATED BY '$'
+MAP KEYS TERMINATED BY '#'
+STORED AS TEXTFILE;
+
+----------------------------------------------------
+-- Load complex table data
+----------------------------------------------------
+
+LOAD DATA INPATH '/data/hive/complex/salesdetail_complex.csv'
+INTO TABLE salesdetail_complex;
+
+----------------------------------------------------
+-- 2. Get only 2 records
+----------------------------------------------------
+
+SELECT * FROM salesdetail_complex LIMIT 2;
+
+----------------------------------------------------
+-- 3. Create non partitioned table
+----------------------------------------------------
+
+CREATE TABLE non_part (
+  dateid SMALLINT,
+  caldate DATE,
+  day STRING,
+  week SMALLINT,
+  month STRING,
+  qtr STRING,
+  year SMALLINT,
+  holiday BOOLEAN
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+STORED AS TEXTFILE;
+
+----------------------------------------------------
+-- Load data into non_part table
+----------------------------------------------------
+
+LOAD DATA INPATH '/data/hive/nonpart/non_part.txt'
+INTO TABLE non_part;
+
+----------------------------------------------------
+-- 4. Create partitioned table
+----------------------------------------------------
+
+CREATE TABLE date_part (
+  dateid SMALLINT,
+  day STRING,
+  week SMALLINT,
+  month STRING,
+  qtr STRING,
+  year SMALLINT,
+  holiday BOOLEAN
+)
+PARTITIONED BY (caldate DATE)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+STORED AS TEXTFILE;
+
+----------------------------------------------------
+-- Enable dynamic partitions
+----------------------------------------------------
+
+SET hive.exec.dynamic.partition=true;
+SET hive.exec.dynamic.partition.mode=nonstrict;
+
+----------------------------------------------------
+-- Insert data from non_part to partitioned table
+----------------------------------------------------
+
+INSERT OVERWRITE TABLE date_part PARTITION (caldate)
+SELECT
+  dateid,
+  day,
+  week,
+  month,
+  qtr,
+  year,
+  holiday,
+  caldate
+FROM non_part;
+
+----------------------------------------------------
+-- Check partitions
+----------------------------------------------------
+
+SHOW PARTITIONS date_part;
+
+----------------------------------------------------
+-- 5. Create partitioned + bucketed table
+----------------------------------------------------
+
+CREATE TABLE date_part_bucket (
+  dateid SMALLINT,
+  week SMALLINT,
+  month STRING,
+  qtr STRING,
+  year SMALLINT,
+  holiday BOOLEAN
+)
+PARTITIONED BY (caldate DATE)
+CLUSTERED BY (dateid) INTO 4 BUCKETS
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+STORED AS TEXTFILE;
+
+----------------------------------------------------
+-- Enable bucketing
+----------------------------------------------------
+
+SET hive.enforce.bucketing=true;
+
+----------------------------------------------------
+-- Insert data into partitioned + bucketed table
+----------------------------------------------------
+
+INSERT OVERWRITE TABLE date_part_bucket PARTITION (caldate)
+SELECT
+  dateid,
+  week,
+  month,
+  qtr,
+  year,
+  holiday,
+  caldate
+FROM non_part
+CLUSTER BY dateid;
+
+----------------------------------------------------
+-- Verify bucketed table
+----------------------------------------------------
+
+SHOW PARTITIONS date_part_bucket;
+
+SELECT * FROM date_part_bucket LIMIT 10;

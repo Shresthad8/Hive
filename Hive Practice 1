@@ -548,3 +548,14 @@ LOCATION '/user/data/logs/';
 SELECT ip_address, COUNT(*) as hit_count
 FROM web_logs
 GROUP BY ip_address;
+
+
+CREATE EXTERNAL TABLE employees (
+    id INT,
+    name STRING,
+    salary FLOAT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/data/employees_folder';

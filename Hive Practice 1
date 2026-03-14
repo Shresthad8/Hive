@@ -559,3 +559,34 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 STORED AS TEXTFILE
 LOCATION '/data/employees_folder';
+
+
+SHOW PARTITIONS date_part_bucket;
+
+SELECT * FROM date_part_bucket LIMIT 10;
+
+
+-- Create the External Table
+CREATE EXTERNAL TABLE IF NOT EXISTS web_logs (
+    log_date STRING,
+    ip_address STRING,
+    url STRING
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '/user/data/logs/';
+
+-- Perform the Analysis
+SELECT ip_address, COUNT(*) as hit_count
+FROM web_logs
+GROUP BY ip_address;
+
+
+CREATE EXTERNAL TABLE employees (
+    id INT,
+    name STRING,
+    salary FLOAT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/data/employees_folder';

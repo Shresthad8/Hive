@@ -634,4 +634,206 @@ hive_metastore.out  initMachine.sh    restartHive.sh   start-airflow.sh  stopHad
 hiveserver2.out     restartHadoop.sh  restartKafka.sh  start-kafka.sh    stopHive.sh
 takeo@cc5c91434bc2:~/startApps$ sh restartHive.sh 
  * Starting OpenBSD Secure Shell server sshd                                                 [ OK ] 
- * Stopping MySQL database server mysqld                                                 [ OK ] 
+ * Stopping MySQL database server mysqld      
+
+[ OK ] 
+
+                
+# Partition Information          
+# col_name              data_type               comment             
+sale_date               date                                        
+                 
+# Detailed Table Information             
+Database:               iphone_analytics         
+OwnerType:              USER                     
+Owner:                  takeo                    
+CreateTime:             Fri Mar 20 00:43:02 IST 2026     
+LastAccessTime:         UNKNOWN                  
+Retention:              0                        
+Location:               hdfs://0.0.0.0:54310/data/hive/warehouse/iphone_analytics.db/silver_sales        
+Table Type:             MANAGED_TABLE            
+Table Parameters:                
+        COLUMN_STATS_ACCURATE   {\"BASIC_STATS\":\"true\"}
+        bucketing_version       2                   
+        numFiles                4                   
+        numPartitions           4                   
+        numRows                 4                   
+        rawDataSize             20                  
+        totalSize               3548                
+        transient_lastDdlTime   1773947582          
+                 
+# Storage Information            
+SerDe Library:          org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe      
+InputFormat:            org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat    
+OutputFormat:           org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat   
+Compressed:             No                       
+Num Buckets:            -1                       
+Bucket Columns:         []                       
+Sort Columns:           []                       
+Storage Desc Params:             
+        serialization.format    1                   
+Time taken: 0.126 seconds, Fetched: 40 row(s)
+hive (iphone_analytics)> SHOW PARTITIONS silver_sales; 
+OK
+sale_date=2023-01-10
+sale_date=2023-01-12
+sale_date=2023-01-15
+sale_date=2023-01-20
+Time taken: 0.077 seconds, Fetched: 4 row(s)
+hive (iphone_analytics)> DESCRIBE FORMATTED fact_sales;
+OK
+# col_name              data_type               comment             
+sale_id                 int                                         
+customer_id             int                                         
+product_id              int                                         
+store_id                int                                         
+quantity                int                                         
+total_amount            int                                         
+                 
+# Partition Information          
+# col_name              data_type               comment             
+date_key                date                                        
+                 
+# Detailed Table Information             
+Database:               iphone_analytics         
+OwnerType:              USER                     
+Owner:                  takeo                    
+CreateTime:             Fri Mar 20 00:45:02 IST 2026     
+LastAccessTime:         UNKNOWN                  
+Retention:              0                        
+Location:               hdfs://0.0.0.0:54310/data/hive/warehouse/iphone_analytics.db/fact_sales  
+Table Type:             MANAGED_TABLE            
+Table Parameters:                
+        COLUMN_STATS_ACCURATE   {\"BASIC_STATS\":\"true\"}
+        bucketing_version       2                   
+        numFiles                4                   
+        numPartitions           4                   
+        numRows                 4                   
+        rawDataSize             24                  
+        totalSize               4160                
+        transient_lastDdlTime   1773947702          
+                 
+# Storage Information            
+SerDe Library:          org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe      
+InputFormat:            org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat    
+OutputFormat:           org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat   
+Compressed:             No                       
+Num Buckets:            -1                       
+Bucket Columns:         []                       
+Sort Columns:           []                       
+Storage Desc Params:             
+        serialization.format    1                   
+Time taken: 0.083 seconds, Fetched: 41 row(s)
+hive (iphone_analytics)> SHOW PARTITIONS fact_sales;
+OK
+date_key=2023-01-10
+date_key=2023-01-12
+date_key=2023-01-15
+date_key=2023-01-20
+Time taken: 0.046 seconds, Fetched: 4 row(s)
+hive (iphone_analytics)> USE iphone_analytics;
+OK
+Time taken: 0.038 seconds
+hive (iphone_analytics)> SELECT COUNT(*) FROM bronze_sales;
+OK
+4
+Time taken: 0.853 seconds, Fetched: 1 row(s)
+hive (iphone_analytics)> SELECT COUNT(*) FROM silver_sales;
+OK
+4
+Time taken: 0.083 seconds, Fetched: 1 row(s)
+hive (iphone_analytics)> SELECT COUNT(*) FROM fact_sales;
+OK
+4
+Time taken: 0.082 seconds, Fetched: 1 row(s)
+hive (iphone_analytics)> SELECT * FROM silver_sales LIMIT 10;
+OK
+1       101     1       10      1       2023-01-10
+2       102     2       20      2       2023-01-12
+3       101     3       20      1       2023-01-15
+4       103     1       10      2       2023-01-20
+Time taken: 0.094 seconds, Fetched: 4 row(s)
+hive (iphone_analytics)> SELECT * FROM fact_sales LIMIT 10;
+OK
+1       1       101     10      1       900     2023-01-10
+2       2       102     20      2       2200    2023-01-12
+3       3       101     20      1       900     2023-01-15
+4       1       103     10      2       400     2023-01-20
+Time taken: 0.086 seconds, Fetched: 4 row(s)
+hive (iphone_analytics)> SELECT p.product_name, SUM(f.total_amount) AS revenue
+                       > FROM fact_sales f
+                       > JOIN dim_product p
+                       > ON f.product_id = p.product_id
+                       > GROUP BY p.product_name;
+Query ID = takeo_20260320015630_8f88b5f2-5d14-45dc-a767-6eb6a23e01a1
+Total jobs = 1
+SLF4J: Found binding in [jar:file:/home/takeo/bootcamp/installshive/apache-hive-3.1.3-bin/lib/log4j-slf4j-impl-2.17.1.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/home/takeo/bootcamp/installs/hadoop-3.3.3/share/hadoop/common/lib/slf4j-reload4j-1.7.36.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+2026-03-20 01:56:32     Starting to launch local task to process map join;      maximum memory = 239075328
+2026-03-20 01:56:33     Uploaded 1 File to: file:/tmp/takeo/6a78f21f-6b2e-411b-af91-bda2abebfe73/hive_2026-03-20_01-56-30_412_3560479140656920047-1/-local-10005/HashTable-Stage-2/MapJoin-mapfile01--.hashtable (345 bytes)
+Execution completed successfully
+MapredLocal task succeeded
+Launching Job 1 out of 1
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1773950408375_0001, Tracking URL = http://1eef5da3469c:8088/proxy/application_1773950408375_0001/
+Kill Command = /home/takeo/installs/hadoop/bin/mapred job  -kill job_1773950408375_0001
+Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1
+2026-03-20 01:56:40,752 Stage-2 map = 0%,  reduce = 0%
+2026-03-20 01:56:43,853 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 1.84 sec
+2026-03-20 01:56:46,915 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 2.68 sec
+MapReduce Total cumulative CPU time: 2 seconds 680 msec
+Ended Job = job_1773950408375_0001
+MapReduce Jobs Launched: 
+Stage-Stage-2: Map: 1  Reduce: 1   Cumulative CPU: 2.68 sec   HDFS Read: 28138 HDFS Write: 165 SUCCESS
+Total MapReduce CPU Time Spent: 2 seconds 680 msec
+OK
+AirPods 400
+iPhone 13       1800
+iPhone 14       2200
+Time taken: 18.654 seconds, Fetched: 3 row(s)
+hive (iphone_analytics)> SELECT s.store_name, SUM(f.total_amount) AS revenue
+                       > FROM fact_sales f
+                       > JOIN dim_store s
+                       > ON f.store_id = s.store_id
+                       > GROUP BY s.store_name;
+Query ID = takeo_20260320015833_3e85ea69-d9a6-4e27-a264-fa851b123996
+Total jobs = 1
+SLF4J: Found binding in [jar:file:/home/takeo/bootcamp/installshive/apache-hive-3.1.3-bin/lib/log4j-slf4j-impl-2.17.1.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/home/takeo/bootcamp/installs/hadoop-3.3.3/share/hadoop/common/lib/slf4j-reload4j-1.7.36.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+2026-03-20 01:58:35     Dump the side-table for tag: 1 with group count: 2 into file: file:/tmp/takeo/6a78f21f-6b2e-411b-af91-bda2abebfe73/hive_2026-03-20_01-58-33_074_1749498772137958148-1/-local-10005/HashTable-Stage-2/MapJoin-mapfile11--.hashtable
+2026-03-20 01:58:35     End of local task; Time Taken: 0.753 sec.
+Execution completed successfully
+MapredLocal task succeeded
+Launching Job 1 out of 1
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1773950408375_0002, Tracking URL = http://1eef5da3469c:8088/proxy/application_1773950408375_0002/
+Kill Command = /home/takeo/installs/hadoop/bin/mapred job  -kill job_1773950408375_0002
+Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1
+2026-03-20 01:58:40,704 Stage-2 map = 0%,  reduce = 0%
+2026-03-20 01:58:44,796 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 1.86 sec
+2026-03-20 01:58:47,864 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 2.7 sec
+MapReduce Total cumulative CPU time: 2 seconds 700 msec
+Ended Job = job_1773950408375_0002
+MapReduce Jobs Launched: 
+Stage-Stage-2: Map: 1  Reduce: 1   Cumulative CPU: 2.7 sec   HDFS Read: 28088 HDFS Write: 151 SUCCESS
+Total MapReduce CPU Time Spent: 2 seconds 700 msec
+OK
+Apple Store NY  3100
+Apple Store SJ  1300
+Time taken: 15.854 seconds, Fetched: 2 row(s)
+hive (iphone_analytics)> quit;

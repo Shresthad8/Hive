@@ -830,6 +830,24 @@ hive (iphone_analytics)> SELECT s.store_name, SUM(f.total_amount) AS revenue
                        > GROUP BY s.store_name;
 Query ID = takeo_20260320015833_3e85ea69-d9a6-4e27-a264-fa851b123996
 Total jobs = 1
+
+# bash
+root@cc5c91434bc2:/# su takeo
+takeo@cc5c91434bc2:/$ cd
+takeo@cc5c91434bc2:~$ ls
+a.txt     bootcamp.csv  data1     hadoop      installs      kafka                        spark           startHive.sh   zipcodes.csv
+airflow   customer.txt  emp.txt   hive        installshive  redshift-jdbc42-2.1.0.9.jar  startApps       stopHadoop.sh  zookeeper
+bootcamp  data          emp1.txt  installAll  jsdk          restartHadoop.sh             startHadoop.sh  test_folder
+takeo@cc5c91434bc2:~$ cd start
+startApps/      startHadoop.sh  startHive.sh    
+takeo@cc5c91434bc2:~$ cd startApps/
+takeo@cc5c91434bc2:~/startApps$ ls
+hive_metastore.out  initMachine.sh    restartHive.sh   start-airflow.sh  stopHadoop.sh  stopKafka.sh
+hiveserver2.out     restartHadoop.sh  restartKafka.sh  start-kafka.sh    stopHive.sh
+takeo@cc5c91434bc2:~/startApps$ sh restartHive.sh 
+ * Starting OpenBSD Secure Shell server sshd                                                 [ OK ] 
+ * Stopping MySQL database server mysqld                                                 [ OK ] 
+ * Starting MySQL database server mysqld         
 SLF4J: Found binding in [jar:file:/home/takeo/bootcamp/installshive/apache-hive-3.1.3-bin/lib/log4j-slf4j-impl-2.17.1.jar!/org/slf4j/impl/StaticLoggerBinder.class]
 SLF4J: Found binding in [jar:file:/home/takeo/bootcamp/installs/hadoop-3.3.3/share/hadoop/common/lib/slf4j-reload4j-1.7.36.jar!/org/slf4j/impl/StaticLoggerBinder.class]
 SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.

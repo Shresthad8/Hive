@@ -17,6 +17,19 @@ takeo@cc5c91434bc2:~/startApps$ sh restartHive.sh
  * Starting MySQL database server mysqld                                                        su: warning: cannot change directory to /nonexistent: No such file or directory
                                           [ OK ]
 Stopping hadoop
+
+a.txt     bootcamp.csv  data1     hadoop      installs      kafka                        spark           startHive.sh   zipcodes.csv
+airflow   customer.txt  emp.txt   hive        installshive  redshift-jdbc42-2.1.0.9.jar  startApps       stopHadoop.sh  zookeeper
+bootcamp  data          emp1.txt  installAll  jsdk          restartHadoop.sh             startHadoop.sh  test_folder
+takeo@cc5c91434bc2:~$ cd start
+startApps/      startHadoop.sh  startHive.sh    
+takeo@cc5c91434bc2:~$ cd startApps/
+takeo@cc5c91434bc2:~/startApps$ ls
+hive_metastore.out  initMachine.sh    restartHive.sh   start-airflow.sh  stopHadoop.sh  stopKafka.sh
+hiveserver2.out     restartHadoop.sh  restartKafka.sh  start-kafka.sh    stopHive.sh
+takeo@cc5c91434bc2:~/startApps$ sh restartHive.sh 
+ * Starting OpenBSD Secure Shell server sshd                                                 [ OK ] 
+ * Stopping MySQL database server mysqld             
 Stopping Hadoop
 Stopping namenodes on [0.0.0.0]
 Stopping datanodes

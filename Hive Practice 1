@@ -410,6 +410,13 @@ Partitioning and bucketing in Hive for telecommunication data improves query per
 
 ******
 
+takeo@cc5c91434bc2:~$ ls
+a.txt         data      hive          kafka                        startHadoop.sh  zookeeper
+airflow       data1     installAll    redshift-jdbc42-2.1.0.9.jar  startHive.sh
+bootcamp      emp.txt   installs      restartHadoop.sh             stopHadoop.sh
+bootcamp.csv  emp1.txt  installshive  spark                        test_folder
+customer.txt  hadoop    jsdk          startApps                    zipcodes.csv
+takeo@cc5c91434bc2:~$ cd installshive
 
 Creating Tables with Partitioning.
 

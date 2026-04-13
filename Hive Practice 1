@@ -68,6 +68,10 @@ takeo@cc5c91434bc2:~/startApps$ ls
 hive_metastore.out  initMachine.sh    restartHive.sh   start-airflow.sh  stopHadoop.sh  stopKafka.sh
 hiveserver2.out     restartHadoop.sh  restartKafka.sh  start-kafka.sh    stopHive.sh
 
+Stopping Hadoop
+Stopping namenodes on [0.0.0.0]
+Stopping datanodes
+
 2026-02-25 21:29:47,568 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Safe mode is OFF
 Starting resourcemanager

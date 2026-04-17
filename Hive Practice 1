@@ -225,6 +225,16 @@ OK
 Time taken: 0.544 seconds
 hive (default)> show databases;
 OK
+takeo@cc5c91434bc2:~$ cd start
+startApps/      startHadoop.sh  startHive.sh    
+takeo@cc5c91434bc2:~$ cd startApps/
+takeo@cc5c91434bc2:~/startApps$ ls
+hive_metastore.out  initMachine.sh    restartHive.sh   start-airflow.sh  stopHadoop.sh  stopKafka.sh
+hiveserver2.out     restartHadoop.sh  restartKafka.sh  start-kafka.sh    stopHive.sh
+takeo@cc5c91434bc2:~/startApps$ sh restartHive.sh 
+ * Starting OpenBSD Secure Shell server sshd                                                 [ OK ] 
+ * Stopping MySQL database server mysqld                                                 [ OK ] 
+ * Starting MySQL database server mysqld      
 default
 practice
 xyz

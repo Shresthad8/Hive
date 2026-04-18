@@ -45,6 +45,8 @@ DEPRECATED: Use of this command to start the timeline server is deprecated.
 Instead use the timelineserver command for it.
 Starting the History Server anyway...
 Stopped hadoop
+ * Starting OpenBSD Secure Shell server sshd                                                 [ OK ] 
+ * Stopping MySQL database server mysqld   
 Starting hadoop
 Starting Hadoop
 Starting namenodes on [0.0.0.0]

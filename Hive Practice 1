@@ -151,6 +151,9 @@ Hive Session ID = de5338f4-817a-4b29-a27f-fd01f54c84ff
 hive (default)> show databases;
 OK
 default
+Time taken: 0.544 seconds
+hive (default)> show databases;
+OK
 xyz
 Time taken: 0.296 seconds, Fetched: 2 row(s)
 hive (default)> show tables;

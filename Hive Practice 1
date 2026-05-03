@@ -30,6 +30,8 @@ hiveserver2.out     restartHadoop.sh  restartKafka.sh  start-kafka.sh    stopHiv
 takeo@cc5c91434bc2:~/startApps$ sh restartHive.sh 
  * Starting OpenBSD Secure Shell server sshd                                                 [ OK ] 
  * Stopping MySQL database server mysqld             
+ * Starting OpenBSD Secure Shell server sshd                                                 [ OK ] 
+ * Stopping MySQL database server mysqld  
 Stopping Hadoop
 Stopping namenodes on [0.0.0.0]
 Stopping datanodes

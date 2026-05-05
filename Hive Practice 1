@@ -709,6 +709,12 @@ FIELDS TERMINATED BY ','
 STORED AS TEXTFILE
 LOCATION '/data/employees_folder';
 
+Time taken: 0.077 seconds, Fetched: 3 row(s)
+hive (default)> use xyz;
+OK
+Time taken: 0.03 seconds
+hive (xyz)> show tables;
+
 
 # bash
 root@cc5c91434bc2:/# su takeo
